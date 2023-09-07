@@ -1,4 +1,4 @@
-import { useInfiniteQuery } from "@tanstack/react-query"
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query"
 import { useAtomValue } from "jotai";
 import { URLSearchParams } from "next/dist/compiled/@edge-runtime/primitives/url";
 
@@ -34,3 +34,17 @@ export const useStores = () => {
         }
     });
 }
+
+export const useStore = (storeId?: string) => {
+    return useQuery<Store>({
+      queryKey: ['STORE', storeId],
+      queryFn: async () => {
+        if (!storeId) {
+          return null
+        }
+        const response = await fetch(`${API_PATH}/store/${storeId}`)
+        return response.json()
+      },
+    })
+  }
+  
